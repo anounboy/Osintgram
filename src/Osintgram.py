@@ -49,10 +49,27 @@ class Osintgram:
         self.writeFile = is_file
         self.jsonDump = is_json
 
+    def follow(self):
+        if self.check_following():
+            pc.printout("You are already following " + str(self.target) + "\n", pc.GREEN)
+            return
+        try:
+            self.api.friendships_create(self.target_id)
+            pc.printout("Follow requests send " + str(self.target) + "\n", pc.GREEN)    
+        except ClientError as e:
+            pc.printout("Error: " + str(e) + "\n", pc.RED)
+    def unfollow(self):
+        if self.check_following():
+            try:
+                self.api.friendships_destroy(self.target_id)
+                pc.printout("You are not following " + str(self.target) + " anymore\n", pc.GREEN)
+            except ClientError as e:
+                pc.printout("Error: " + str(e) + "\n", pc.RED)
+        else:
+            pc.printout("You are not following " + str(self.target) + "\n", pc.RED)
     def clear_cookies(self,clear_cookies):
         if clear_cookies:
             self.clear_cache()
-
     def setTarget(self, target):
         self.target = target
         user = self.get_user(target)
@@ -60,7 +77,6 @@ class Osintgram:
         self.is_private = user['is_private']
         self.following = self.check_following()
         self.__printTargetBanner__()
-
     def __get_feed__(self):
         data = []
 
@@ -1163,8 +1179,8 @@ class Osintgram:
             pc.printout("Impossible to execute command: user has private profile\n", pc.RED)
             send = input("Do you want send a follow request? [Y/N]: ")
             if send.lower() == "y":
-                self.api.friendships_create(self.target_id)
-                print("Sent a follow request to target. Use this command after target accepting the request.")
+                self.follow(self.target_id)
+                print("Use this command after target accepting the request.")
 
             return True
         return False
