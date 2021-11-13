@@ -41,6 +41,8 @@ Osintgram offers an interactive shell to perform analysis on Instagram account o
 - tagged          Get list of users tagged by target
 - wcommented      Get a list of user who commented target's photos
 - wtagged         Get a list of user who tagged target
+- follow          Follow the target
+- unfollow        Unfollow the target
 ```
 
 You can find detailed commands usage [here](doc/COMMANDS.md).
